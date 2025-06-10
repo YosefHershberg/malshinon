@@ -1,0 +1,25 @@
+# Ignore VSCode settings
+.vscode/
+
+# Ignore build output
+bin/
+obj/
+
+# Ignore user secrets and logs
+log.txt
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore other common files
+*.swp
+*.tmp
+*.bak
+*.ncb
+*.cache
+*.log
