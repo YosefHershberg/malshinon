@@ -76,6 +76,52 @@ namespace DAL
             if (result.Count == 0) return null;
             return result[0]["SecretCode"]?.ToString();
         }
+
+        // Returns a single person by Id, or null if not found
+        public static Person? GetPersonById(int id)
+        {
+            string sql = $"SELECT * FROM People WHERE Id={id}";
+            var result = DBConnection.Execute(sql);
+            if (result.Count == 0) return null;
+            var row = result[0];
+            return new Person(
+                Convert.ToInt32(row["Id"]),
+                row["FullName"]?.ToString(),
+                row["SecretCode"]?.ToString(),
+                Convert.ToDateTime(row["CreatedAt"]) 
+            );
+        }
+
+        // Finds people where FullName contains the provided substring (case-sensitive per DB collation)
+        public static List<Person> FindPeopleByNameLike(string partialName)
+        {
+            string safe = partialName.Replace("'", "''");
+            string sql = $"SELECT * FROM People WHERE FullName LIKE '%{safe}%'";
+            var rows = DBConnection.Execute(sql);
+            return rows.Select(row => new Person(
+                Convert.ToInt32(row["Id"]),
+                row["FullName"]?.ToString(),
+                row["SecretCode"]?.ToString(),
+                Convert.ToDateTime(row["CreatedAt"]) 
+            )).ToList();
+        }
+
+        // Updates a person's FullName by Id; returns true if the new name persisted
+        public static bool UpdatePersonName(int id, string newName)
+        {
+            if (string.IsNullOrWhiteSpace(newName)) return false;
+            string safe = newName.Replace("'", "''");
+            string sql = $"UPDATE People SET FullName='{safe}' WHERE Id={id}";
+            DBConnection.Execute(sql);
+
+            // Verify the update
+            sql = $"SELECT FullName FROM People WHERE Id={id}";
+            var result = DBConnection.Execute(sql);
+            bool ok = result.Count > 0 && string.Equals(result[0]["FullName"]?.ToString(), newName, StringComparison.Ordinal);
+            if (ok)
+                Logger.Log($"PersonUpdated: Id {id} -> '{newName}'");
+            return ok;
+        }
     }
 
 }
