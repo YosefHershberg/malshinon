@@ -6,6 +6,7 @@ class Program
     static void Main(string[] args)
     {
         Console.WriteLine("Malshinon — Community Intel Reporting System\n");
+
         while (true)
         {
             Console.WriteLine("1. Submit Report");
@@ -14,7 +15,9 @@ class Program
             Console.WriteLine("4. Analysis Dashboard");
             Console.WriteLine("5. Exit");
             Console.Write("Select option: ");
+            
             var opt = Console.ReadLine();
+            
             switch (opt)
             {
                 case "1": SubmitReport(); break;
@@ -52,24 +55,31 @@ class Program
     {
         int count = 0;
         using var reader = new StreamReader("./sample_import.csv");
+        
         string? header = reader.ReadLine();
         if (header == null) { Console.WriteLine("CSV is empty.\n"); return; }
+        
         while (!reader.EndOfStream)
         {
             var line = reader.ReadLine();
             if (string.IsNullOrWhiteSpace(line)) continue;
+            
             var parts = line.Split(',');
             if (parts.Length < 4) continue;
+            
             var reporter = parts[0];
             var target = parts[1];
             var text = parts[2];
+            
             if (!DateTime.TryParse(parts[3], null, System.Globalization.DateTimeStyles.AssumeLocal, out var ts)) continue;
             if (string.IsNullOrWhiteSpace(reporter) || string.IsNullOrWhiteSpace(target) || string.IsNullOrWhiteSpace(text)) continue;
+            
             int reporterId = PeopleDAL.GetOrCreatePerson(reporter);
             int targetId = PeopleDAL.GetOrCreatePerson(target);
             ReportsDAL.InsertReport(reporterId, targetId, text, ts);
             count++;
         }
+        
         Logger.Log($"CSVImport: Imported {count} reports from ./sample_import.csv");
     }
 
@@ -78,9 +88,12 @@ class Program
         Console.Write("Full name: ");
         var name = Console.ReadLine();
         if (string.IsNullOrWhiteSpace(name)) { Console.WriteLine("Name is required.\n"); return; }
+        
         var code = PeopleDAL.GetSecretCodeByName(name);
-        if (string.IsNullOrEmpty(code)) Console.WriteLine("Not found.\n");
-        else Console.WriteLine($"Secret code: {code}\n");
+        if (string.IsNullOrEmpty(code)) 
+            Console.WriteLine("Not found.\n");
+        else 
+            Console.WriteLine($"Secret code: {code}\n");
     }
 
     static void ShowDashboard()
