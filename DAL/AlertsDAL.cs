@@ -34,5 +34,12 @@ namespace DAL
             string sql = "SELECT a.Id, p.FullName, a.WindowStart, a.WindowEnd, a.Reason FROM Alerts a JOIN People p ON a.TargetId = p.Id ORDER BY a.CreatedAt DESC LIMIT 10";
             return DBConnection.Execute(sql);
         }
+
+        public static void DismissAlert(int alertId)
+        {
+            string sql = $"UPDATE Alerts SET Dismissed = 1 WHERE Id = {alertId}";
+            DBConnection.Execute(sql);
+            Logger.Log($"AlertDismissed: Alert {alertId} was dismissed.");
+        }
     }
 }
