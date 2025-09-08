@@ -59,7 +59,7 @@ namespace DAL
 
         public static int GetPersonIdByCodeName(string codeName)
         {
-            string sql = $"SELECT * FROM People WHERE Id={codeName}";
+            string sql = $"SELECT Id FROM People WHERE SecretCode='{codeName.Replace("'", "''")}'";
             var result = DBConnection.Execute(sql);
             if (result.Count == 0) return -1;
             return Convert.ToInt32(result[0]["Id"]!);

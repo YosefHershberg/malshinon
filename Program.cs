@@ -71,7 +71,6 @@ class Program
             count++;
         }
         Logger.Log($"CSVImport: Imported {count} reports from ./sample_import.csv");
-        Console.WriteLine($"Imported {count} reports.\n");
     }
 
     static void ShowSecretCode()
@@ -87,17 +86,17 @@ class Program
     static void ShowDashboard()
     {
         Console.WriteLine("Potential Recruits:");
-        var recruits = ReportsDAL.GetPotentialRecruits();
+        var recruits = ReportsDAL.GetPotentialRecruits(); // NOTE: Limit 10
         DBConnection.PrintResult(recruits);
         Console.WriteLine();
 
         Console.WriteLine("Dangerous Targets:");
-        var dangerous = ReportsDAL.GetDangerousTargets();
+        var dangerous = ReportsDAL.GetDangerousTargets(); // NOTE: Limit 10
         DBConnection.PrintResult(dangerous);
         Console.WriteLine();
 
         Console.WriteLine("Alerts:");
-        var alerts = AlertsDAL.GetRecentAlerts();
+        var alerts = AlertsDAL.GetRecentAlerts(); // NOTE: Limit 10
         DBConnection.PrintResult(alerts);
         Console.WriteLine();
     }
