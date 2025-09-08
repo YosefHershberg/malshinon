@@ -53,9 +53,19 @@ class Program
 
     static void ImportCsv()
     {
+        Console.Write("CSV file path (default ./sample_import.csv): ");
+        var path = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(path))
+            path = "./sample_import.csv";
+        if (!File.Exists(path))
+        {
+            Console.WriteLine("File not found.\n");
+            return;
+        }
+
         int count = 0;
-        using var reader = new StreamReader("./sample_import.csv");
-        
+        using var reader = new StreamReader(path);
+
         string? header = reader.ReadLine();
         if (header == null) { Console.WriteLine("CSV is empty.\n"); return; }
         
@@ -80,7 +90,7 @@ class Program
             count++;
         }
         
-        Logger.Log($"CSVImport: Imported {count} reports from ./sample_import.csv");
+        Logger.Log($"CSVImport: Imported {count} reports from {path}");
     }
 
     static void ShowSecretCode()

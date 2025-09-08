@@ -21,8 +21,8 @@ Malshinon is a simulated intelligence platform for collecting and analyzing comm
 
 ## Usage
 - **Submit Report**: Follow CLI prompts to log in, select target, and submit a report.
-- **Import CSV**: Use the import option and provide a CSV file (see `sample_import.csv`).
-- **Dashboard**: View analytics and alerts.
+ - **Import CSV**: Use the import option, then enter a path to a CSV file or press Enter to use `./sample_import.csv`.
+ - **Dashboard**: View analytics and alerts.
 
 ## Analysis Logic
 - **Potential Recruits**: ≥10 reports, avg. report length ≥100 chars.
